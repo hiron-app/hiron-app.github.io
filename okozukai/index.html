@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>おこづかい帳 - サポート</title>
+  <meta name="description" content="おこづかい帳のサポートページです。使い方やよくある質問を掲載しています。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #FF6B9D;
+      --orange: #FF9557;
+      --yellow: #FFD957;
+      --mint: #66E5CC;
+      --sky: #73C7FF;
+      --lavender: #BAA0FF;
+      --bg: #FFF8F5;
+      --card: #FFFFFF;
+      --text: #332640;
+      --text-sub: #8C80A0;
+      --shadow: rgba(0,0,0,0.07);
+      --radius: 24px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'M PLUS Rounded 1c', 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #FFF0F8 0%, #FFF8F0 50%, #F0FFF8 100%);
+      z-index: 0;
+    }
+
+    /* 背景の装飾バブル */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.18;
+      animation: float 6s ease-in-out infinite;
+    }
+    .bubble-1 { width: 220px; height: 220px; background: var(--pink); top: -60px; left: -60px; animation-delay: 0s; }
+    .bubble-2 { width: 160px; height: 160px; background: var(--mint); top: 20%; right: -40px; animation-delay: 1.5s; }
+    .bubble-3 { width: 120px; height: 120px; background: var(--yellow); bottom: 15%; left: 10%; animation-delay: 3s; }
+    .bubble-4 { width: 80px; height: 80px; background: var(--lavender); top: 40%; left: 5%; animation-delay: 0.8s; }
+    .bubble-5 { width: 100px; height: 100px; background: var(--orange); bottom: 10%; right: 10%; animation-delay: 2s; }
+    .bubble-6 { width: 60px; height: 60px; background: var(--sky); top: 10%; left: 40%; animation-delay: 4s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-18px) rotate(5deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+    }
+
+    .app-icon {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, var(--pink), var(--orange));
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      margin: 0 auto 28px;
+      box-shadow: 0 12px 40px rgba(255,107,157,0.35);
+      animation: iconPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes iconPop {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 7vw, 52px);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--pink), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-sub {
+      font-size: clamp(15px, 3vw, 18px);
+      color: var(--text-sub);
+      font-weight: 500;
+      line-height: 1.7;
+      margin-bottom: 36px;
+      animation: fadeUp 0.6s 0.35s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.5s ease both;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .badge-ios { background: linear-gradient(135deg, var(--pink), var(--lavender)); color: white; }
+    .badge-free { background: linear-gradient(135deg, var(--mint), var(--sky)); color: white; }
+    .badge-safe { background: linear-gradient(135deg, var(--yellow), var(--orange)); color: white; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      animation: bounce 2s ease-in-out infinite;
+      color: var(--text-sub);
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .scroll-hint::after {
+      content: '';
+      width: 2px;
+      height: 28px;
+      background: linear-gradient(to bottom, var(--pink), transparent);
+      border-radius: 2px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ===== SECTIONS ===== */
+    section {
+      padding: 80px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 900;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ===== FEATURES ===== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      box-shadow: 0 4px 20px var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+    }
+
+    .feature-card:nth-child(1)::before { background: linear-gradient(90deg, var(--pink), var(--orange)); }
+    .feature-card:nth-child(2)::before { background: linear-gradient(90deg, var(--mint), var(--sky)); }
+    .feature-card:nth-child(3)::before { background: linear-gradient(90deg, var(--lavender), var(--pink)); }
+    .feature-card:nth-child(4)::before { background: linear-gradient(90deg, var(--yellow), var(--orange)); }
+    .feature-card:nth-child(5)::before { background: linear-gradient(90deg, var(--sky), var(--lavender)); }
+    .feature-card:nth-child(6)::before { background: linear-gradient(90deg, var(--orange), var(--yellow)); }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.1);
+    }
+
+    .feature-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .feature-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .feature-desc {
+      font-size: 13.5px;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
+
+    /* ===== HOW TO ===== */
+    .howto-bg {
+      background: linear-gradient(135deg, #FFF0F8, #FFF8F0);
+      border-radius: 32px;
+      padding: 48px 40px;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      background: white;
+      border-radius: 20px;
+      padding: 20px 24px;
+      box-shadow: 0 4px 16px var(--shadow);
+      transition: transform 0.2s ease;
+    }
+
+    .step:hover { transform: translateX(6px); }
+
+    .step-num {
+      width: 42px;
+      height: 42px;
+      min-width: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .step:nth-child(1) .step-num { background: linear-gradient(135deg, var(--pink), var(--orange)); }
+    .step:nth-child(2) .step-num { background: linear-gradient(135deg, var(--mint), var(--sky)); }
+    .step:nth-child(3) .step-num { background: linear-gradient(135deg, var(--lavender), var(--pink)); }
+    .step:nth-child(4) .step-num { background: linear-gradient(135deg, var(--yellow), var(--orange)); }
+    .step:nth-child(5) .step-num { background: linear-gradient(135deg, var(--sky), var(--lavender)); }
+
+    .step-content h3 {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 13.5px;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
+
+    /* ===== FAQ ===== */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    details {
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: 0 4px 16px var(--shadow);
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 20px 24px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: background 0.2s ease;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    summary:hover { background: #FFF0F8; }
+
+    summary::after {
+      content: '＋';
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--pink);
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    details[open] summary::after { transform: rotate(45deg); }
+
+    details[open] summary { background: #FFF0F8; }
+
+    .faq-answer {
+      padding: 0 24px 20px;
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.8;
+    }
+
+    /* ===== PASSCODE NOTE ===== */
+    .passcode-note {
+      background: linear-gradient(135deg, var(--pink), var(--orange));
+      border-radius: 28px;
+      padding: 40px;
+      color: white;
+      text-align: center;
+      margin: 0 auto;
+      box-shadow: 0 12px 40px rgba(255,107,157,0.3);
+    }
+
+    .passcode-note .big-emoji { font-size: 52px; margin-bottom: 12px; }
+
+    .passcode-note h3 {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .passcode-note p {
+      font-size: 15px;
+      line-height: 1.7;
+      opacity: 0.9;
+    }
+
+    .passcode-box {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 16px;
+      padding: 12px 32px;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      margin: 16px 0;
+    }
+
+    /* ===== CONTACT / LINKS ===== */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+      background: var(--card);
+      border-radius: 20px;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: 0 4px 20px var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .link-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    }
+
+    .link-card-icon {
+      width: 52px;
+      height: 52px;
+      min-width: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .link-card-icon.pp { background: linear-gradient(135deg, var(--lavender), var(--sky)); }
+    .link-card-icon.contact { background: linear-gradient(135deg, var(--mint), var(--sky)); }
+
+    .link-card-text strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .link-card-text span {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 40px 24px 48px;
+      color: var(--text-sub);
+      font-size: 13px;
+      line-height: 2;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+
+    footer .footer-emoji { font-size: 28px; margin-bottom: 8px; }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .howto-bg { padding: 32px 20px; }
+      .step { gap: 14px; }
+      .passcode-note { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="bubble bubble-1"></div>
+    <div class="bubble bubble-2"></div>
+    <div class="bubble bubble-3"></div>
+    <div class="bubble bubble-4"></div>
+    <div class="bubble bubble-5"></div>
+    <div class="bubble bubble-6"></div>
+
+    <div class="hero-content">
+      <div class="app-icon">🌟</div>
+      <h1>おこづかい帳</h1>
+      <p class="hero-sub">
+        お手伝いをがんばって、おこづかいをためよう！<br>
+        親子でいっしょに使える、かんたんお小遣い管理アプリ
+      </p>
+      <div class="badge-row">
+        <span class="badge badge-ios">📱 iOS対応</span>
+        <span class="badge badge-free">✨ 無料で使える</span>
+        <span class="badge badge-safe">🔒 こどもに安心</span>
+      </div>
+    </div>
+
+    <div class="scroll-hint">スクロール</div>
+  </div>
+
+  <!-- FEATURES -->
+  <section>
+    <h2 class="section-title reveal">🎉 できること</h2>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feature-icon">⭐</span>
+        <div class="feature-title">やることリスト</div>
+        <p class="feature-desc">おてつだいのタスクを登録して、できたら「できた！」ボタンをポン！　親が承認するとおこづかいが貯まるよ。</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">💰</span>
+        <div class="feature-title">さいふ管理</div>
+        <p class="feature-desc">承認されたおこづかいの残高をリアルタイムで確認できる。いくら貯まったか一目でわかるよ！</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎯</span>
+        <div class="feature-title">貯金もくひょう</div>
+        <p class="feature-desc">ほしいものを目標に設定して進捗バーで確認！目標達成したらおやに見せてうけとろう。</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">📊</span>
+        <div class="feature-title">りれき・カレンダー</div>
+        <p class="feature-desc">承認履歴をリストまたはカレンダーで見られる。毎日こつこつがんばった記録が一目でわかる！</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">👤</span>
+        <div class="feature-title">マルチプロフィール</div>
+        <p class="feature-desc">最大5人のプロフィールを作れるから、きょうだい全員で使えるよ！絵文字や写真でアイコンを設定しよう。</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🔒</span>
+        <div class="feature-title">親のパスコード認証</div>
+        <p class="feature-desc">承認操作は4桁パスコードで保護。子どもが勝手に承認できないから安心して使えるよ。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO USE -->
+  <section>
+    <div class="howto-bg reveal">
+      <h2 class="section-title">📖 つかいかた</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>プロフィールをつくろう</h3>
+            <p>アプリを起動したら「ついか」ボタンをタップして、お子さんの名前と絵文字（または写真）でプロフィールを作ります。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>やることをとうろく（おや）</h3>
+            <p>「やること」タブの「ついか」ボタンから、お手伝いのタスクと金額を登録します。絵文字も選べるよ！</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>「できた！」ボタンをおす（こども）</h3>
+            <p>お手伝いが終わったら「できた！」ボタンをタップして申請します。親に「しんせいまち」として通知されるよ。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>パスコードでしょうにん（おや）</h3>
+            <p>申請を確認したら親がパスコードを入力して承認！承認されると残高に加算されます。却下した場合は再申請できるよ。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>もくひょうたっせいでうけとり！</h3>
+            <p>貯金目標を達成したら「うけとり」タブから請求しよう。画面をおやに見せておこづかいをもらおう！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASSCODE NOTE -->
+  <section>
+    <div class="passcode-note reveal">
+      <div class="big-emoji">🔑</div>
+      <h3>はじめてのパスコードについて</h3>
+      <p>アプリのデフォルトパスコードは</p>
+      <div class="passcode-box">1234</div>
+      <p>です。<br>「せってい」タブからいつでも変更できます。<br>かならずお子さんに知られないパスコードに変更してください！</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <h2 class="section-title reveal">❓ よくある質問</h2>
+    <div class="faq-list">
+      <details class="reveal">
+        <summary>パスコードを忘れてしまいました</summary>
+        <div class="faq-answer">
+          「せってい」タブの「パスコードを初期化」ボタンをタップすると、パスコードが「1234」に戻ります。確認アラートが表示されますので、「OK」を選んでください。その後、新しいパスコードに変更することをお勧めします。
+        </div>
+      </details>
+      <details class="reveal">
+        <summary>子どもが1日に何回も「できた！」を申請できますか？</summary>
+        <div class="faq-answer">
+          1つのタスクにつき、1日に1回までしか申請・承認できない仕様になっています。承認されると「あしたまたがんばろう！」と表示されて、翌日までロックされます。毎日コツコツ続けることを促す設計です。
+        </div>
+      </details>
+      <details class="reveal">
+        <summary>プロフィールは何人まで作れますか？</summary>
+        <div class="faq-answer">
+          最大5人分のプロフィールを作成できます。きょうだいがいても全員で使えます。プロフィールごとに残高・目標・履歴がすべて独立して管理されます。
+        </div>
+      </details>
+      <details class="reveal">
+        <summary>申請を却下した場合、その日もう一度申請できますか？</summary>
+        <div class="faq-answer">
+          はい、できます。却下された場合は申請中の状態がリセットされ、もう一度「できた！」ボタンが押せるようになります。再申請して、改めて承認してもらえます。
+        </div>
+      </details>
+      <details class="reveal">
+        <summary>データはどこに保存されますか？</summary>
+        <div class="faq-answer">
+          すべてのデータはお使いのiPhone本体（UserDefaults）に保存されます。サーバーには一切送信されません。アプリを削除すると、データも一緒に削除されますのでご注意ください。
+        </div>
+      </details>
+      <details class="reveal">
+        <summary>広告を消すことはできますか？</summary>
+        <div class="faq-answer">
+          はい！「せってい」タブの「こうこくをけす」から広告除去（有料）を購入できます。一度購入すると同じApple IDでは復元も可能です（「こうにゅうをふくげん」ボタンを使用）。
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section>
+    <h2 class="section-title reveal">📋 リンク</h2>
+    <div class="links-grid">
+      <a href="https://sites.google.com/view/pro-scout/%E3%83%9B%E3%83%BC%E3%83%A0" class="link-card reveal" target="_blank" rel="noopener">
+        <div class="link-card-icon pp">🔏</div>
+        <div class="link-card-text">
+          <strong>プライバシーポリシー</strong>
+          <span>個人情報の取り扱いについて</span>
+        </div>
+      </a>
+      <a href="https://forms.gle/44vv4Db2T1MqpQ7r8" class="link-card reveal">
+        <div class="link-card-icon contact">✉️</div>
+        <div class="link-card-text">
+          <strong>お問い合わせ</strong>
+          <span>ご意見・不具合のご報告はこちら</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-emoji">🌟</div>
+    <div>おこづかい帳</div>
+    <div>© 2025 Hiroaki. All rights reserved.</div>
+  </footer>
+
+  <script>
+    // スクロールアニメーション
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
