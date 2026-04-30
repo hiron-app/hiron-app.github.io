@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アプリ紹介 | 個人開発</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    background: #f8f7f5;
+    color: #1a1a2e;
+    overflow-x: hidden;
+  }
+  #root { min-height: 100vh; }
+
+  /* Page transitions */
+  .page-enter { animation: pageIn 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+  .page-exit { animation: pageOut 0.25s ease-in both; }
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(32px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes pageOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-16px); }
+  }
+
+  /* Hover lift for cards */
+  .card-lift {
+    transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s ease;
+    cursor: pointer;
+  }
+  .card-lift:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.14);
+  }
+  .card-lift:active { transform: translateY(-2px) scale(0.99); }
+
+  /* Ripple btn */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px; border-radius: 100px; border: none; cursor: pointer;
+    font-family: inherit; font-size: 16px; font-weight: 800;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+  .btn-primary:active { transform: scale(0.97); }
+
+  /* Back button */
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; border-radius: 100px;
+    border: 2px solid rgba(0,0,0,0.12); background: white;
+    font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { background: #f0f0f0; transform: translateX(-4px); }
+
+  /* Feature pill */
+  .feature-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 100px;
+    font-size: 13px; font-weight: 700;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const { useState, useEffect, useRef } = React;
+
+const APPS = [
+{
+  id: 'proscout',
+  name: 'プロスカウト',
+  nameEn: 'ProScout',
+  icon: 'uploads/IMG_7559 4.PNG',
+  catch: 'あなたの成績。\nプロなら年俸いくら！？',
+  tagline: '野球成績を簡単入力、自動計算、らくらく管理。',
+  desc: 'あなたの野球成績を入力するだけで、もしプロ野球選手だったら年俸がいくらになるか自動計算！成績の記録・管理も楽々こなせて、おもしろ機能も盛りだくさん。野球好きのための究極のお楽しみアプリ。',
+  features: [
+  { icon: '⚾', label: '成績かんたん入力/自動計算' },
+  { icon: '💰', label: '年俸査定（NPB & MLB）' },
+  { icon: '🏋️', label: '練習登録' },
+  { icon: '💨', label: 'スイング/投球スピード記録' },
+  { icon: '📈', label: '成長グラフ' },
+  { icon: '🧠', label: '野球ルールクイズ他盛りだくさん' }],
+
+  color1: '#FF6B00',
+  color2: '#FFB830',
+  color3: '#0052CC',
+  bg: 'linear-gradient(135deg, #fff8ed 0%, #fff3e0 100%)',
+  heroGrad: 'linear-gradient(135deg, #FF6B00 0%, #FFB830 60%, #0052CC 100%)',
+  accent: '#FF6B00',
+  textDark: '#7A2D00',
+  appStoreUrl: 'https://apps.apple.com/jp/app/%E3%83%97%E3%83%AD%E3%82%B9%E3%82%AB%E3%82%A6%E3%83%88-%E9%87%8E%E7%90%83%E3%82%B9%E3%82%B3%E3%82%A2%E5%B9%B4%E4%BF%B8%E6%9F%BB%E5%AE%9A/id6760993493',
+  privacyUrl: 'privacy-proscout.html'
+},
+{
+  id: 'ganbatta',
+  name: 'がんばった帳',
+  nameEn: 'Ganbatta-cho',
+  icon: 'uploads/IMG_7593 3.PNG',
+  catch: 'どんどんがんばる\nかしこく使う',
+  tagline: 'がんばることリストを登録。おわったら承認もらって、おこづかいゲット！',
+  desc: 'やることをリストに登録して、終わったら親に承認してもらうだけ。自動でおこづかいが加算される、子どもも親もうれしいアプリ。お小遣い帳機能で収支管理もできるよ！',
+  features: [
+  { icon: '✅', label: 'がんばること/おこづかい登録' },
+  { icon: '👍', label: 'ちゃんとした承認機能' },
+  { icon: '🪙', label: 'おこづかい自動計算' },
+  { icon: '📒', label: 'おこづかい帳機能' },
+  { icon: '📋', label: 'りれき確認' },
+  { icon: '👨‍👩‍👧‍👦', label: '５名まで登録可能' }],
+
+  color1: '#FF7EB3',
+  color2: '#FFCCE1',
+  color3: '#FFB830',
+  bg: 'linear-gradient(135deg, #fff5f9 0%, #fff0f7 100%)',
+  heroGrad: 'linear-gradient(135deg, #FF7EB3 0%, #FFB3D4 60%, #FFD6EC 100%)',
+  accent: '#FF5EA0',
+  textDark: '#8B2252',
+  appStoreUrl: 'https://apps.apple.com/jp/app/%E3%81%8C%E3%82%93%E3%81%B0%E3%81%A3%E3%81%9F%E5%B8%B3-%E3%81%8A%E3%81%93%E3%81%A5%E3%81%8B%E3%81%84%E7%AE%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id6761584121',
+  privacyUrl: 'privacy-ganbatta.html'
+},
+{
+  id: 'pukapuka',
+  name: 'ぷかぷか',
+  nameEn: 'Pukapuka',
+  icon: 'uploads/IMG_8122 3.PNG',
+  catch: 'やることぷかぷか見える化\n脳みそスッキリ！',
+  tagline: 'タスクをぷかぷかと浮かべて、終わったら壊そう！',
+  desc: 'その日やること、毎日やること、全部ぷかぷか並べて可視化。終わったら弾けるように壊す爽快感。空き時間とやることを直感で理解できて、楽しくタスクをこなしていこう！',
+  features: [
+  { icon: '🫧', label: 'タスクをバブルで可視化' },
+  { icon: '💥', label: '完了したらバブルをパッチン' },
+  { icon: '⏱️', label: '空き時間を見える化' },
+  { icon: '👆', label: 'タスクをドラッグで移動可能' },
+  { icon: '🔁', label: '繰り返しタスクにも対応' },
+  { icon: '⭐', label: 'ぷかぷかProで便利機能使い放題' }],
+
+  color1: '#5B9EF5',
+  color2: '#B28EF8',
+  color3: '#FF8EC8',
+  bg: 'linear-gradient(135deg, #f0f4ff 0%, #f5f0ff 100%)',
+  heroGrad: 'linear-gradient(135deg, #5B9EF5 0%, #9B78F4 60%, #FF8EC8 100%)',
+  accent: '#7B61FF',
+  textDark: '#2D1B6E',
+  appStoreUrl: null,
+  privacyUrl: 'privacy-pukapuka.html'
+}];
+
+
+/* ── Top Page ── */
+function TopPage({ onSelect }) {
+  return (
+    <div className="page-enter" style={{ minHeight: '100vh' }}>
+      {/* Hero */}
+      <header style={{
+        background: 'linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+        padding: '64px 24px 80px',
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Decorative circles */}
+        {[...Array(6)].map((_, i) =>
+        <div key={i} style={{
+          position: 'absolute',
+          borderRadius: '50%',
+          border: '1px solid rgba(255,255,255,0.06)',
+          width: `${(i + 1) * 160}px`, height: `${(i + 1) * 160}px`,
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          animation: `pulse ${3 + i * 0.5}s ease-in-out infinite alternate`
+        }} />
+        )}
+        <style>{`@keyframes pulse { from { opacity:0.3; transform:translate(-50%,-50%) scale(0.98); } to { opacity:0.8; transform:translate(-50%,-50%) scale(1.02); } }`}</style>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            borderRadius: '100px',
+            padding: '6px 20px',
+            fontSize: '13px', fontWeight: 700,
+            color: 'rgba(255,255,255,0.75)',
+            marginBottom: '24px',
+            letterSpacing: '0.05em'
+          }}>アプリで生活をもっとたのしく</div>
+          <h1 style={{
+            fontSize: 'clamp(32px, 6vw, 64px)',
+            fontWeight: 900,
+            color: 'white',
+            lineHeight: 1.15,
+            marginBottom: '16px',
+            textWrap: 'balance'
+          }}>楽しく使える、<br />アプリを作っています</h1>
+          <p style={{
+            color: 'rgba(255,255,255,0.6)',
+            fontSize: 'clamp(15px, 2vw, 18px)',
+            fontWeight: 500,
+            maxWidth: 480, margin: '0 auto'
+          }}>日常をもっと楽しくするアプリを開発中！</p>
+        </div>
+      </header>
+
+      {/* Wave divider */}
+      <div style={{ marginTop: -2, lineHeight: 0, background: '#1a1a2e' }}>
+        <svg viewBox="0 0 1440 60" style={{ display: 'block', width: '100%' }} preserveAspectRatio="none">
+          <path d="M0,0 C360,60 1080,0 1440,60 L1440,0 Z" fill="#f8f7f5" />
+        </svg>
+      </div>
+
+      {/* App Cards Grid */}
+      <section style={{ padding: '64px 24px 80px', maxWidth: 1100, margin: '0 auto' }}>
+        <h2 style={{ textAlign: 'center', fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: 800, marginBottom: 8, color: '#1a1a2e' }}>アプリ一覧</h2>
+        <p style={{ textAlign: 'center', color: '#888', fontSize: 14, marginBottom: 48, fontWeight: 500 }}>アプリをタップして詳しく見る</p>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: 28
+        }}>
+          {APPS.map((app) =>
+          <AppCard key={app.id} app={app} onSelect={onSelect} />
+          )}
+        </div>
+
+        {/* Coming soon */}
+        <div style={{
+          marginTop: 40,
+          padding: '28px',
+          border: '2px dashed rgba(0,0,0,0.12)',
+          borderRadius: 24,
+          textAlign: 'center',
+          color: '#bbb'
+        }}>
+          <div style={{ fontSize: 32, marginBottom: 8 }}>✨</div>
+          <div style={{ fontWeight: 700, fontSize: 15 }}>新しいアプリも開発中！</div>
+          <div style={{ fontSize: 13, marginTop: 4 }}>Coming soon...</div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer style={{
+        borderTop: '1px solid rgba(0,0,0,0.07)',
+        padding: '32px 24px',
+        textAlign: 'center',
+        color: '#bbb',
+        fontSize: 13,
+        fontWeight: 500
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 24, marginBottom: 12, flexWrap: 'wrap' }}>
+          <a href="privacy.html" style={{ color: '#999', textDecoration: 'none', fontWeight: 700 }}>プライバシーポリシー</a>
+          <a href="https://forms.gle/44vv4Db2T1MqpQ7r8" target="_blank" rel="noopener noreferrer" style={{ color: '#999', textDecoration: 'none', fontWeight: 700 }}>お問い合わせ</a>
+        </div>
+        ©️ proscout2026
+      </footer>
+    </div>);
+
+}
+
+function AppCard({ app, onSelect }) {
+  return (
+    <div
+      className="card-lift"
+      onClick={() => onSelect(app.id)}
+      style={{
+        background: 'white',
+        borderRadius: 28,
+        overflow: 'hidden',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.07)'
+      }}>
+      
+      {/* Card header with gradient */}
+      <div style={{
+        background: app.heroGrad,
+        padding: '40px 28px 28px',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* BG blobs */}
+        <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.12)' }} />
+        <div style={{ position: 'absolute', bottom: -20, left: -10, width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
+        
+        <img
+          src={app.icon}
+          alt={app.name}
+          style={{
+            width: 96, height: 96,
+            borderRadius: 22,
+            objectFit: 'cover',
+            display: 'block',
+            marginBottom: 16,
+            boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+            position: 'relative',
+            zIndex: 1
+          }} />
+        
+        <h3 style={{ color: 'white', fontSize: 22, fontWeight: 900, marginBottom: 4, position: 'relative', zIndex: 1 }}>{app.name}</h3>
+        <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 13, fontWeight: 600, position: 'relative', zIndex: 1 }}>{app.nameEn}</p>
+      </div>
+
+      {/* Card body */}
+      <div style={{ padding: '24px 28px 28px' }}>
+        <div style={{
+          background: app.bg,
+          borderRadius: 16,
+          padding: '14px 18px',
+          marginBottom: 16,
+          borderLeft: `4px solid ${app.accent}`
+        }}>
+          <p style={{ fontSize: 14, fontWeight: 800, color: app.textDark, lineHeight: 1.5, textWrap: 'pretty', whiteSpace: 'pre-line' }}>
+            {app.catch}
+          </p>
+        </div>
+        <p style={{ fontSize: 13, color: '#666', lineHeight: 1.7, fontWeight: 500, marginBottom: 20 }}>
+          {app.tagline}
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            color: app.accent, fontSize: 13, fontWeight: 800
+          }}>
+            詳しく見る <span style={{ fontSize: 16 }}>→</span>
+          </div>
+        </div>
+      </div>
+    </div>);
+
+}
+
+/* ── Detail Page ── */
+function DetailPage({ appId, onBack }) {
+  const app = APPS.find((a) => a.id === appId);
+  const [entered, setEntered] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setEntered(true), 50);
+    window.scrollTo(0, 0);
+  }, []);
+
+  if (!app) return null;
+
+  return (
+    <div className="page-enter" style={{ minHeight: '100vh', background: '#f8f7f5' }}>
+      {/* Hero */}
+      <div style={{
+        background: app.heroGrad,
+        padding: '0 0 60px',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Decorative */}
+        <div style={{ position: 'absolute', top: -80, right: -80, width: 280, height: 280, borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
+        <div style={{ position: 'absolute', bottom: -40, left: -40, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
+
+        {/* Nav */}
+        <div style={{ padding: '20px 24px', position: 'relative', zIndex: 2 }}>
+          <button className="back-btn" onClick={onBack} style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', borderColor: 'rgba(255,255,255,0.3)', color: 'white' }}>
+            ← 一覧に戻る
+          </button>
+        </div>
+
+        {/* App info */}
+        <div style={{ padding: '20px 32px 0', maxWidth: 800, margin: '0 auto', position: 'relative', zIndex: 2 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24, flexWrap: 'wrap' }}>
+            <img
+              src={app.icon}
+              alt={app.name}
+              style={{
+                width: 120, height: 120,
+                borderRadius: 28,
+                objectFit: 'cover',
+                boxShadow: '0 16px 48px rgba(0,0,0,0.3)',
+                flexShrink: 0
+              }} />
+            
+            <div>
+              <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 700, marginBottom: 6, letterSpacing: '0.05em' }}>
+                {app.nameEn}
+              </div>
+              <h1 style={{ color: 'white', fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 900, lineHeight: 1.1, marginBottom: 12 }}>
+                {app.name}
+              </h1>
+              <p style={{ color: 'rgba(255,255,255,0.88)', fontSize: 'clamp(15px, 2.5vw, 20px)', fontWeight: 700, textWrap: 'balance', whiteSpace: 'pre-line' }}>
+                「{app.catch}」
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Wave */}
+      <div style={{ marginTop: -2, lineHeight: 0, background: app.heroGrad }}>
+        <svg viewBox="0 0 1440 60" style={{ display: 'block', width: '100%' }} preserveAspectRatio="none">
+          <path d="M0,60 C480,0 960,60 1440,0 L1440,60 Z" fill="#f8f7f5" />
+        </svg>
+      </div>
+
+      {/* Content */}
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: '16px 24px 80px' }}>
+        {/* Description */}
+        <div style={{
+          background: 'white',
+          borderRadius: 24,
+          padding: '32px',
+          marginBottom: 24,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.06)'
+        }}>
+          <h2 style={{ fontSize: 18, fontWeight: 800, marginBottom: 16, color: '#1a1a2e' }}>アプリについて</h2>
+          <p style={{ fontSize: 16, color: '#444', lineHeight: 1.9, fontWeight: 500, textWrap: 'pretty' }}>
+            {app.desc}
+          </p>
+        </div>
+
+        {/* Features */}
+        <div style={{
+          background: 'white',
+          borderRadius: 24,
+          padding: '32px',
+          marginBottom: 24,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.06)'
+        }}>
+          <h2 style={{ fontSize: 18, fontWeight: 800, marginBottom: 20, color: '#1a1a2e' }}>主な機能</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
+            {app.features.map((f, i) =>
+            <div key={i} style={{
+              background: app.bg,
+              borderRadius: 18,
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 10,
+              textAlign: 'center',
+              border: `1px solid ${app.accent}22`
+            }}>
+                <div style={{ fontSize: 32 }}>{f.icon}</div>
+                <div style={{ fontSize: 13, fontWeight: 800, color: app.textDark, lineHeight: 1.4 }}>{f.label}</div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div style={{
+          background: app.heroGrad,
+          borderRadius: 24,
+          padding: '40px 32px',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.12)' }} />
+          <div style={{ position: 'absolute', bottom: -20, left: -20, width: 100, height: 100, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 700, marginBottom: 8 }}>
+              {app.appStoreUrl ? 'App Store で公開中' : '近日公開予定'}
+            </div>
+            <h3 style={{ color: 'white', fontSize: 24, fontWeight: 900, marginBottom: 24, textWrap: 'balance' }}>
+              {app.appStoreUrl ? '今すぐ試してみよう！' : 'もうすぐリリース！お楽しみに 🎉'}
+            </h3>
+            {app.appStoreUrl ? (
+              <a href={app.appStoreUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                <button className="btn-primary" style={{ background: 'white', color: app.accent }}>
+                  <span>🍎</span> App Store で入手
+                </button>
+              </a>
+            ) : (
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', borderRadius: 100, padding: '14px 32px', color: 'white', fontWeight: 800, fontSize: 16 }}>
+                ⏳ Coming soon...
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Contact CTA */}
+        <div style={{
+          background: 'white',
+          borderRadius: 24,
+          padding: '28px 32px',
+          marginBottom: 24,
+          boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 16,
+        }}>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 4, color: '#1a1a2e' }}>ご意見・お問い合わせ</div>
+            <div style={{ fontSize: 13, color: '#888', fontWeight: 500 }}>バグ報告・機能リクエストなどお気軽にどうぞ</div>
+          </div>
+          <a
+            href="https://forms.gle/44vv4Db2T1MqpQ7r8"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none' }}
+          >
+            <button className="btn-primary" style={{ background: app.heroGrad, color: 'white', flexShrink: 0 }}>
+              📩 お問い合わせはこちら
+            </button>
+          </a>
+        </div>
+
+        {/* Back */}
+        <div style={{ textAlign: 'center', marginTop: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+          <button className="back-btn" onClick={onBack}>
+            ← アプリ一覧に戻る
+          </button>
+          {app.privacyUrl && (
+            <a href={app.privacyUrl} style={{ fontSize: 13, color: '#aaa', fontWeight: 700, textDecoration: 'none' }}>
+              プライバシーポリシー
+            </a>
+          )}
+        </div>
+      </div>
+    </div>);
+
+}
+
+/* ── App Root ── */
+function App() {
+  const [page, setPage] = useState(() => {
+    return localStorage.getItem('hp_page') || 'top';
+  });
+
+  const navigate = (to) => {
+    localStorage.setItem('hp_page', to);
+    setPage(to);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (page !== 'top') {
+    return <DetailPage appId={page} onBack={() => navigate('top')} />;
+  }
+  return <TopPage onSelect={(id) => navigate(id)} />;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
