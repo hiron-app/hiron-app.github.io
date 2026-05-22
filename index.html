@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>proscout / works — 個人開発アプリ</title>
+<meta name="description" content="日常をちょっと整え、ちょっと楽しくする、個人開発のiPhoneアプリ。">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="uploads/IMG_7559 4.PNG">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --bg:      #F4F1EC;
+    --card:    #FFFFFF;
+    --ink:     #0E0E0E;
+    --mute:    #73706B;
+    --faint:   #A8A39A;
+    --line:    #E5E0D5;
+    --line-2:  #EFEAE0;
+    --shadow:  0 1px 2px rgba(20,16,8,0.04), 0 8px 24px rgba(20,16,8,0.04);
+    --shadow-hover: 0 2px 4px rgba(20,16,8,0.05), 0 18px 40px rgba(20,16,8,0.09);
+    --green:   #3a8a4f;
+    --font-jp: "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    --radius:  16px;
+    --radius-lg: 20px;
+    --container: 1080px;
+    --pad: 48px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: var(--font-jp);
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "palt";
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+  }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
+  a { color: inherit; }
+  button { font-family: inherit; }
+
+  .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--pad); }
+
+  /* Header */
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 84%, transparent);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+    backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .site-header.scrolled {
+    border-bottom-color: var(--line);
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+  }
+  .site-header__inner {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px var(--pad);
+    max-width: var(--container); margin: 0 auto;
+  }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.06em;
+    text-decoration: none; color: var(--ink);
+  }
+  .brand__mark {
+    width: 24px; height: 24px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav { display: flex; gap: 28px; font-size: 13px; font-weight: 600; color: var(--mute); }
+  .nav a { text-decoration: none; transition: color 0.2s; }
+  .nav a:hover { color: var(--ink); }
+  .nav__back {
+    background: transparent; border: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--ink); padding: 0;
+  }
+  .nav__back svg { transition: transform 0.3s; }
+  .nav__back:hover svg { transform: translateX(-3px); }
+
+  /* Page transition */
+  .page { animation: pageIn 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+  @keyframes pageIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+  .reveal.shown { opacity: 1; transform: translateY(0); }
+
+  /* Hero — top */
+  .hero { padding: 96px var(--pad) 96px; max-width: var(--container); margin: 0 auto; }
+  .hero__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 56px; align-items: end; }
+  .hero__chip {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 6px 14px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-size: 12px; letter-spacing: 0.16em; color: var(--mute); font-weight: 600;
+    margin-bottom: 32px;
+  }
+  .hero__chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .hero h1 {
+    font-size: clamp(34px, 5.2vw, 60px);
+    font-weight: 700; line-height: 1.3; letter-spacing: 0.01em;
+    margin: 0; text-wrap: balance;
+  }
+  .hero__lead {
+    font-size: 15; line-height: 2.05;
+    color: var(--mute); font-weight: 500;
+    margin: 0; padding-bottom: 8px;
+    text-wrap: pretty;
+  }
+  @media (max-width: 760px) {
+    .hero { padding: 56px 24px 64px; }
+    .hero__grid { grid-template-columns: 1fr; gap: 28px; align-items: start; }
+    .hero h1 { font-size: clamp(30px, 8vw, 44px); }
+    :root { --pad: 24px; }
+  }
+
+  /* Apps section */
+  .apps { padding: 0 var(--pad) 96px; max-width: var(--container); margin: 0 auto; }
+  .apps__header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .apps__title { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: 0.04em; }
+  .apps__count { font-size: 12px; color: var(--faint); letter-spacing: 0.12em; font-weight: 600; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; gap: 16px; }
+    .apps { padding: 0 24px 64px; }
+  }
+
+  /* App card */
+  .app-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 28px 24px;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s, border-color 0.3s;
+    display: flex; flex-direction: column;
+    min-height: 320px;
+    position: relative;
+    will-change: transform;
+  }
+  .app-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: color-mix(in srgb, var(--ink) 8%, var(--line)); }
+  .app-card__top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 12px;
+    background: var(--bg);
+    border-radius: 100px;
+    font-size: 11px; letter-spacing: 0.08em; font-weight: 600; color: var(--mute);
+  }
+  .chip__sq { width: 7px; height: 7px; border-radius: 2px; }
+  .status {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  }
+  .status--avail { color: var(--green); }
+  .status--soon  { color: var(--faint); }
+  .app-card__body { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 20px; }
+  .app-card__icon { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; display: block; flex-shrink: 0; }
+  .app-card__name { font-size: 20px; font-weight: 700; letter-spacing: 0.02em; line-height: 1.2; margin: 4px 0 6px; }
+  .app-card__name-en { font-size: 12px; color: var(--faint); font-weight: 500; letter-spacing: 0.06em; }
+  .app-card__catch {
+    font-size: 16px; line-height: 1.7; font-weight: 600;
+    margin: 0 0 12px; text-wrap: balance; letter-spacing: 0.02em;
+  }
+  .app-card__tagline {
+    font-size: 13px; line-height: 1.9; color: var(--mute); font-weight: 500;
+    flex: 1; margin: 0; text-wrap: pretty;
+  }
+  .app-card__cta {
+    margin-top: 22px; padding-top: 16px;
+    border-top: 1px solid var(--line-2);
+    display: flex; justify-content: flex-end; align-items: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .app-card__cta-link { display: inline-flex; align-items: center; gap: 6px; }
+  .app-card__cta-link svg { transition: transform 0.3s; }
+  .app-card:hover .app-card__cta-link svg { transform: translateX(4px); }
+
+  /* Footer */
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: var(--card);
+    padding: 48px var(--pad) 56px;
+  }
+  .site-footer__inner {
+    max-width: var(--container); margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .site-footer__brand-name { font-size: 14px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 4px; }
+  .site-footer__copy { font-size: 12px; color: var(--mute); font-weight: 500; }
+  .site-footer__nav { display: flex; gap: 24px; font-size: 13px; color: var(--mute); font-weight: 600; }
+  .site-footer__nav a { text-decoration: none; transition: color 0.2s; }
+  .site-footer__nav a:hover { color: var(--ink); }
+  @media (max-width: 760px) {
+    .site-footer { padding: 40px 24px 48px; }
+    .site-footer__inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+  }
+
+  /* === DETAIL PAGE === */
+  .detail-hero {
+    padding: 48px var(--pad) 40px;
+    max-width: var(--container); margin: 0 auto;
+  }
+  .detail-hero__card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 48px 48px 44px;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .detail-hero__icon {
+    width: 160px; height: 160px; border-radius: 32px;
+    object-fit: cover; display: block;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+  .detail-hero__name {
+    font-size: clamp(28px, 4.5vw, 44px);
+    font-weight: 700; line-height: 1.2; letter-spacing: 0.01em;
+    margin: 16px 0 8px;
+  }
+  .detail-hero__name-en {
+    font-size: 14px; color: var(--faint); font-weight: 500;
+    letter-spacing: 0.08em; margin-bottom: 20px;
+  }
+  .detail-hero__catch {
+    font-size: 18px; line-height: 1.7; font-weight: 600;
+    margin: 0; text-wrap: balance; letter-spacing: 0.02em;
+  }
+  @media (max-width: 760px) {
+    .detail-hero { padding: 32px 24px 24px; }
+    .detail-hero__card { grid-template-columns: 1fr; gap: 24px; padding: 32px 28px; text-align: left; }
+    .detail-hero__icon { width: 96px; height: 96px; border-radius: 22px; }
+    .detail-hero__name { font-size: clamp(26px, 6vw, 36px); margin-top: 0; }
+  }
+
+  .detail-body { max-width: var(--container); margin: 0 auto; padding: 8px var(--pad) 40px; }
+  .detail-grid {
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px;
+  }
+  @media (max-width: 760px) {
+    .detail-body { padding: 8px 24px 32px; }
+    .detail-grid { grid-template-columns: 1fr; gap: 16px; }
+  }
+
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 32px 32px;
+  }
+  .panel__label {
+    font-size: 11px; letter-spacing: 0.18em;
+    color: var(--faint); font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .panel__desc {
+    font-size: 15px; line-height: 2.0;
+    margin: 0; font-weight: 500; text-wrap: pretty;
+  }
+
+  .feature-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line-2);
+  }
+  .feature-row:first-of-type { border-top: none; padding-top: 4px; }
+  .feature-row__ico {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .feature-row__label {
+    font-size: 14px; font-weight: 600; letter-spacing: 0.02em;
+  }
+
+  .cta-panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 40px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 24px;
+    max-width: var(--container);
+    margin: 0 auto var(--pad);
+  }
+  .cta-panel__label {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--faint);
+    font-weight: 700; margin-bottom: 8px;
+  }
+  .cta-panel__title {
+    font-size: 22px; font-weight: 700; letter-spacing: 0.02em;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--ink); color: #fff;
+    padding: 14px 28px; border-radius: 100px;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.05em;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); background: #2a2a2a; }
+  .btn-soon {
+    display: inline-block; padding: 14px 28px; border-radius: 100px;
+    border: 1px solid var(--line); color: var(--mute);
+    font-size: 14px; font-weight: 600;
+  }
+  .detail-meta {
+    max-width: var(--container); margin: 0 auto;
+    padding: 0 var(--pad) 80px;
+    font-size: 12px; color: var(--mute); font-weight: 500; text-align: center;
+  }
+  .detail-meta a { color: var(--mute); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; transition: color 0.2s, text-decoration-color 0.2s; }
+  .detail-meta a:hover { color: var(--ink); text-decoration-color: var(--ink); }
+  @media (max-width: 760px) {
+    .cta-panel { padding: 32px 28px; flex-direction: column; align-items: flex-start; gap: 20px; }
+    .detail-meta { padding: 0 24px 64px; }
+  }
+
+  /* Skip-link / a11y */
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
+  /* Focus visibility */
+  a:focus-visible, button:focus-visible, .app-card:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="renewal-data.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ── Reveal-on-scroll wrapper ── */
+function Reveal2({ children, delay = 0, as: Tag = 'div', className = '', style }) {
+  const ref = useRef(null);
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { setShown(true); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '-40px 0px', threshold: 0.05 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <Tag
+      ref={ref}
+      className={`reveal ${shown ? 'shown' : ''} ${className}`}
+      style={{ transitionDelay: `${delay}ms`, ...style }}
+    >
+      {children}
+    </Tag>
+  );
+}
+
+/* ── Site header (sticky, condenses on scroll) ── */
+function SiteHeader({ mode, onBack }) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return (
+    <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
+      <div className="site-header__inner">
+        {mode === 'detail' ? (
+          <button className="nav__back" onClick={onBack}>
+            <RIcon name="arrow" size={14} stroke={1.6} style={{ transform: 'rotate(180deg)' }} />
+            一覧へ戻る
+          </button>
+        ) : (
+          <a className="brand" href="#top">
+            <span className="brand__mark">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
+              </svg>
+            </span>
+            proscout / works
+          </a>
+        )}
+        <nav className="nav" aria-label="primary">
+          {mode === 'top' ? (
+            <>
+              <a href="#apps">Apps</a>
+              <a href="privacy.html">Privacy</a>
+              <a href="https://forms.gle/44vv4Db2T1MqpQ7r8" target="_blank" rel="noopener noreferrer">Contact</a>
+            </>
+          ) : (
+            <>
+              <a href="privacy.html">Privacy</a>
+              <a href="https://forms.gle/44vv4Db2T1MqpQ7r8" target="_blank" rel="noopener noreferrer">Contact</a>
+            </>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+/* ── Top page ── */
+function TopPage({ onSelect }) {
+  return (
+    <main className="page" id="top">
+      <section className="hero">
+        <div className="hero__grid">
+          <div>
+            <Reveal2>
+              <div className="hero__chip">
+                <span className="dot" />
+                個人開発 / 現在 {RENEWAL_APPS.length} タイトル
+              </div>
+            </Reveal2>
+            <Reveal2 as="h1" delay={100}>
+              毎日が、<br />
+              ちょっと整う。<br />
+              ちょっと楽しい。
+            </Reveal2>
+          </div>
+          <Reveal2 delay={200}>
+            <p className="hero__lead" style={{ fontSize: 15 }}>
+              家族のため、自分のため、誰かのために、ひとつずつ手づくりでアプリを作っています。
+              派手な機能より、毎日そっと寄り添うことを大切に。
+            </p>
+          </Reveal2>
+        </div>
+      </section>
+
+      <section className="apps" id="apps">
+        <Reveal2 className="apps__header">
+          <h2 className="apps__title">すべてのアプリ</h2>
+          <div className="apps__count">{RENEWAL_APPS.length} TITLES</div>
+        </Reveal2>
+        <div className="grid">
+          {RENEWAL_APPS.map((app, i) => (
+            <Reveal2 key={app.id} delay={i * 60}>
+              <AppCard app={app} onSelect={onSelect} />
+            </Reveal2>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function AppCard({ app, onSelect }) {
+  return (
+    <article
+      className="app-card"
+      onClick={() => onSelect(app.id)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(app.id); } }}
+      role="button"
+      tabIndex={0}
+      aria-label={`${app.name} の詳細`}
+    >
+      <div className="app-card__top">
+        <span className="chip">
+          <span className="chip__sq" style={{ background: app.accent }} />
+          {app.category}
+        </span>
+        <span className={`status ${app.status === 'coming' ? 'status--soon' : 'status--avail'}`}>
+          {app.status === 'coming' ? 'COMING SOON' : 'AVAILABLE'}
+        </span>
+      </div>
+      <div className="app-card__body">
+        <img src={app.icon} alt="" className="app-card__icon" />
+        <div style={{ minWidth: 0 }}>
+          <div className="app-card__name">{app.name}</div>
+          <div className="app-card__name-en">{app.nameEn}</div>
+        </div>
+      </div>
+      <p className="app-card__catch">{app.catch}</p>
+      <p className="app-card__tagline">{app.tagline}</p>
+      <div className="app-card__cta">
+        <span className="app-card__cta-link" style={{ color: app.accent }}>
+          詳しく見る
+          <RIcon name="arrow" size={14} stroke={1.8} />
+        </span>
+      </div>
+    </article>
+  );
+}
+
+/* ── Detail page ── */
+function DetailPage({ appId, onBack }) {
+  const app = RENEWAL_APPS.find((a) => a.id === appId);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [appId]);
+  if (!app) return null;
+  return (
+    <main className="page">
+      <section className="detail-hero">
+        <Reveal2 className="detail-hero__card">
+          <img src={app.icon} alt="" className="detail-hero__icon" />
+          <div>
+            <span className="chip" style={{ marginBottom: 16, display: 'inline-flex' }}>
+              <span className="chip__sq" style={{ background: app.accent }} />
+              {app.category}
+            </span>
+            <h1 className="detail-hero__name">{app.name}</h1>
+            <div className="detail-hero__name-en">{app.nameEn}</div>
+            <p className="detail-hero__catch">「{app.catch}」</p>
+          </div>
+        </Reveal2>
+      </section>
+
+      <section className="detail-body">
+        <div className="detail-grid">
+          <Reveal2 delay={60} className="panel">
+            <div className="panel__label">ABOUT</div>
+            <p className="panel__desc">{app.desc}</p>
+          </Reveal2>
+          <Reveal2 delay={120} className="panel">
+            <div className="panel__label">FEATURES</div>
+            <div>
+              {app.features.map((f, i) => (
+                <div className="feature-row" key={i}>
+                  <div className="feature-row__ico" style={{ color: app.accent }}>
+                    <RIcon name={f.ico} size={18} stroke={1.6} />
+                  </div>
+                  <div className="feature-row__label">{f.label}</div>
+                </div>
+              ))}
+            </div>
+          </Reveal2>
+        </div>
+      </section>
+
+      <Reveal2 delay={60} className="cta-panel">
+        <div>
+          <div className="cta-panel__label">{app.status === 'coming' ? 'COMING SOON' : 'AVAILABLE NOW'}</div>
+          <div className="cta-panel__title">
+            {app.status === 'coming' ? 'もうすぐ、お会いできます。' : 'いますぐ、お試しください。'}
+          </div>
+        </div>
+        {app.status === 'available' && app.appStoreUrl ? (
+          <a className="btn-primary" href={app.appStoreUrl} target="_blank" rel="noopener noreferrer">
+            <RIcon name="apple" size={18} />
+            App Store で入手
+          </a>
+        ) : (
+          <span className="btn-soon">近日公開予定</span>
+        )}
+      </Reveal2>
+
+      <div className="detail-meta">
+        <a href={app.privacyUrl}>プライバシーポリシー</a>
+        <span style={{ margin: '0 12px' }}>·</span>
+        <a href="https://forms.gle/44vv4Db2T1MqpQ7r8" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
+      </div>
+    </main>
+  );
+}
+
+/* ── Site footer (top page only) ── */
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="site-footer__inner">
+        <div>
+          <div className="site-footer__brand-name">proscout / works</div>
+          <div className="site-footer__copy">© 2026 proscout2026 — All rights reserved.</div>
+        </div>
+        <div className="site-footer__nav">
+          <a href="privacy.html">プライバシーポリシー</a>
+          <a href="https://forms.gle/44vv4Db2T1MqpQ7r8" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ── App shell with simple router ── */
+function App() {
+  const [page, setPage] = useState(() => {
+    const hash = window.location.hash.replace('#/', '');
+    if (hash && RENEWAL_APPS.some((a) => a.id === hash)) return hash;
+    return 'top';
+  });
+
+  useEffect(() => {
+    const onHash = () => {
+      const hash = window.location.hash.replace('#/', '');
+      if (hash && RENEWAL_APPS.some((a) => a.id === hash)) setPage(hash);
+      else setPage('top');
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  const navigate = (to) => {
+    if (to === 'top') { history.pushState(null, '', window.location.pathname); }
+    else { history.pushState(null, '', `#/${to}`); }
+    setPage(to);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  const mode = page === 'top' ? 'top' : 'detail';
+
+  return (
+    <>
+      <SiteHeader mode={mode} onBack={() => navigate('top')} />
+      {mode === 'top'
+        ? <TopPage onSelect={navigate} />
+        : <DetailPage key={page} appId={page} onBack={() => navigate('top')} />}
+      {mode === 'top' && <SiteFooter />}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
