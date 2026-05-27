@@ -3,6 +3,29 @@
 
 const RENEWAL_APPS = [
   {
+    id: 'nawabari',
+    name: 'ナワバリウォーク',
+    nameEn: 'NawabariWalk',
+    category: 'ウォーキング / RPG',
+    icon: 'uploads/icon-nawabari.png',
+    catch: 'あいぼうと歩こう。世界はキミのナワバリだ。',
+    tagline: '歩いた道があなたの陣地に変わる、新感覚のお散歩アドベンチャー。',
+    desc: '歩いた道があなたの陣地に変わる。あいぼうと一緒に街を冒険し、世界を塗り替えていく新感覚のお散歩アドベンチャー。',
+    accent: '#4E9A3A',
+    features: [
+      { ico: 'map',      label: '歩いた軌跡でナワバリ生成' },
+      { ico: 'monster',  label: 'モンスター侵食シミュレーション' },
+      { ico: 'cat',      label: '相棒の猫が進化' },
+      { ico: 'cloud',    label: '天気連動で能力が変化' },
+      { ico: 'watch',    label: 'Apple Watch スタンドアロン対応' },
+      { ico: 'widget',   label: 'ホーム画面ウィジェット（Pro）' },
+    ],
+    appStoreUrl: null,
+    privacyUrl: 'privacy-nawabari.html',
+    lpUrl: 'nawabari-walk.html',
+    status: 'coming',
+  },
+  {
     id: 'proscout',
     name: 'プロスカウト',
     nameEn: 'ProScout',
@@ -152,6 +175,11 @@ const RIconPaths = {
   shield:   <><path d="M12 3l8 3v6c0 4.5-3.5 8-8 9-4.5-1-8-4.5-8-9V6z" /></>,
   plus:     <><path d="M12 5v14M5 12h14" /></>,
   dot:      <><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none" /></>,
+  map:      <><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z" /><path d="M9 4v16M15 6v16" /></>,
+  monster:  <><path d="M5 11a7 7 0 0 1 14 0v9l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5z" /><circle cx="10" cy="11" r="1.2" fill="currentColor" stroke="none" /><circle cx="14" cy="11" r="1.2" fill="currentColor" stroke="none" /></>,
+  cat:      <><path d="M5 11l-1-5 4 3M19 11l1-5-4 3" /><path d="M5 11c0 4 3 7 7 7s7-3 7-7" /><circle cx="10" cy="13" r=".8" fill="currentColor" stroke="none" /><circle cx="14" cy="13" r=".8" fill="currentColor" stroke="none" /><path d="M11 16c.5.5 1.5.5 2 0" /></>,
+  cloud:    <><path d="M7 18a4 4 0 0 1-.5-7.96A6 6 0 0 1 18 11a3.5 3.5 0 0 1 0 7z" /></>,
+  watch:    <><rect x="7" y="6" width="10" height="12" rx="2" /><path d="M9 6l1-3h4l1 3M9 18l1 3h4l1-3" /></>,
 };
 
 function RIcon({ name, size = 20, stroke = 1.5, style }) {
