@@ -487,11 +487,15 @@ function TopPage({ onSelect }) {
 }
 
 function AppCard({ app, onSelect }) {
+  const handleOpen = () => {
+    if (app.lpUrl) { window.location.href = app.lpUrl; return; }
+    onSelect(app.id);
+  };
   return (
     <article
       className="app-card"
-      onClick={() => onSelect(app.id)}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(app.id); } }}
+      onClick={handleOpen}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleOpen(); } }}
       role="button"
       tabIndex={0}
       aria-label={`${app.name} の詳細`}
