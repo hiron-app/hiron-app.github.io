@@ -20,10 +20,10 @@ const RENEWAL_APPS = [
       { ico: 'watch',    label: 'Apple Watch スタンドアロン対応' },
       { ico: 'widget',   label: 'ホーム画面ウィジェット（Pro）' },
     ],
-    appStoreUrl: null,
+    appStoreUrl: 'https://apps.apple.com/us/app/%E3%83%8A%E3%83%AF%E3%83%90%E3%83%AA%E3%82%A6%E3%82%A9%E3%83%BC%E3%82%AF-%E3%81%82%E3%81%84%E3%81%BC%E3%81%86%E3%81%A8%E6%AD%A9%E3%81%93%E3%81%86/id6773541212',
     privacyUrl: 'privacy-nawabari.html',
     lpUrl: 'nawabari-walk.html',
-    status: 'coming',
+    status: 'available',
   },
   {
     id: 'proscout',
