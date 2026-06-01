@@ -7,7 +7,32 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="uploads/icon-nawabari.png">
 <link rel="stylesheet" href="privacy.css">
-<style>:root { --accent: #4E9A3A; }</style>
+<style>
+  :root { --accent: #4E9A3A; }
+  .lang-toggle {
+    display: inline-flex; gap: 4px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+  .lang-toggle button {
+    appearance: none; border: none; cursor: pointer;
+    background: transparent; color: var(--mute);
+    font-family: inherit; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 8px 20px; border-radius: 999px;
+    transition: background 0.25s, color 0.25s;
+  }
+  .lang-toggle button[aria-pressed="true"] {
+    background: var(--accent); color: #fff;
+  }
+  [data-lang-en] { display: none; }
+  body.is-en [data-lang-ja] { display: none; }
+  body.is-en [data-lang-en] { display: revert; }
+</style>
 </head>
 <body>
 
@@ -17,7 +42,7 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(180deg)" aria-hidden="true">
         <path d="M5 12h14M13 6l6 6-6 6"></path>
       </svg>
-      プライバシーポリシー一覧へ戻る
+      <span data-lang-ja>プライバシーポリシー一覧へ戻る</span><span data-lang-en>Back to privacy policy list</span>
     </a>
     <nav class="nav" aria-label="primary">
       <a href="index.html">Apps</a>
@@ -31,12 +56,17 @@
     <img src="uploads/icon-nawabari.png" alt="" class="privacy-hero__icon">
     <div>
       <div class="privacy-hero__label">PRIVACY POLICY</div>
-      <h1 class="privacy-hero__title">ナワバリウォーク</h1>
-      <div class="privacy-hero__name-en">NawabariWalk</div>
+      <h1 class="privacy-hero__title"><span data-lang-ja>ナワバリウォーク</span><span data-lang-en>TurfWalk</span></h1>
+      <div class="privacy-hero__name-en"><span data-lang-ja>TurfWalk</span><span data-lang-en>ナワバリウォーク</span></div>
     </div>
   </section>
 
-  <article class="panel">
+  <div class="lang-toggle" role="group" aria-label="Language / 言語">
+    <button type="button" id="btnJa" aria-pressed="true">日本語</button>
+    <button type="button" id="btnEn" aria-pressed="false">English</button>
+  </div>
+
+  <article class="panel" data-lang-ja>
     <p class="updated">最終更新日：2026年5月27日　／　本プライバシーポリシーは日本語を正式言語とします。</p>
 
     <h2>はじめに</h2>
@@ -134,6 +164,105 @@
     <p>本プライバシーポリシーに関するご質問・ご意見は、開発者ホームページのお問い合わせ先からご連絡ください。</p>
     <p><a href="https://hiron-app.github.io" target="_blank" rel="noopener noreferrer" class="text-link">https://hiron-app.github.io</a></p>
   </article>
+
+  <article class="panel" data-lang-en>
+    <p class="updated">Last updated: May 27, 2026　／　The Japanese text of this Privacy Policy is the official version; this English text is provided for reference.</p>
+
+    <h2>Introduction</h2>
+    <p class="intro">Thank you for using "TurfWalk" (the "App"). The App is a personal app developed to provide a walking experience in which you create "turf" on a map from the routes you walk and raise your companion cat.<br><br>This Privacy Policy explains what information the App handles and how that information is used. Please read this Policy carefully before using the App.</p>
+
+    <h2>1. Information We Collect</h2>
+
+    <h3>1-1. Information stored on your device within the App</h3>
+    <p>The App stores the following information only on your device. This information is not sent to any external server.</p>
+    <ul>
+      <li><strong>Location and walking routes:</strong> GPS coordinates obtained while walking and the turf polygons calculated from those routes (on-device only)</li>
+      <li><strong>Turf information:</strong> each turf's area, creation date and time, erosion state, number of visits, walking distance, and step count</li>
+      <li><strong>Companion (cat) information:</strong> the currently selected companion ID, cumulative walking distance per companion, evolution stage, and the list of unlocked companions</li>
+      <li><strong>Item inventory:</strong> stock of functional items such as ward talismans, repellent spray, and revival seeds</li>
+      <li><strong>Play progress:</strong> total walking distance, total turf area, coin balance, login bonus information, and quest completion status</li>
+      <li><strong>App settings:</strong> notification permission state, auto-walk-end setting, currently selected tab, and so on</li>
+    </ul>
+    <div class="note">All of this data is stored in your device's UserDefaults (local storage).</div>
+
+    <h3>1-2. Information arising from communication with external services</h3>
+    <p>The App communicates with the following external services to provide its features. None of them transmit information that can personally identify you.</p>
+    <ul>
+      <li><strong>Apple Maps (Apple Inc.):</strong> sends tile requests for the area around your current location in order to display the map</li>
+      <li><strong>WeatherKit (Apple Inc.):</strong> sends your current coordinates to obtain weather information, used to adjust companion abilities and turf erosion speed based on the weather</li>
+      <li><strong>App Store / StoreKit 2 (Apple Inc.):</strong> obtains purchase information managed by Apple in order to purchase or restore the Pro plan (an auto-renewing subscription)</li>
+      <li><strong>Game Center (Apple Inc.):</strong> uses your Game Center player identifier to submit your score to the total-turf-area ranking</li>
+      <li><strong>Apple Watch (WatchConnectivity):</strong> syncs walk data and item information only between your iPhone and Apple Watch. This is not sent to Apple servers or to the developer</li>
+    </ul>
+    <p>For the privacy policies of each service, please refer to the respective company's website.</p>
+    <p>Apple Privacy Policy: <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener noreferrer" class="text-link">https://www.apple.com/legal/privacy/</a></p>
+
+    <h2>2. Purpose of Use</h2>
+    <table class="info-table">
+      <tr><th>Type of information</th><th>Purpose of use</th></tr>
+      <tr><td>Location and walking routes</td><td>Creating turf, erosion determination, and re-visit determination</td></tr>
+      <tr><td>Turf information and play progress</td><td>Map display, statistics display, quest progression, and erosion simulation</td></tr>
+      <tr><td>Companion and item information</td><td>Companion evolution, calculation of acquisition multipliers and shrink resistance, and applying item effects</td></tr>
+      <tr><td>Weather information</td><td>Adjusting companion abilities and turf erosion speed</td></tr>
+      <tr><td>StoreKit purchase information</td><td>Enabling Pro plan features</td></tr>
+      <tr><td>Game Center player identifier</td><td>Submitting scores to the ranking</td></tr>
+    </table>
+
+    <h2>3. Sharing and Disclosure to Third Parties</h2>
+    <p>The App does not share your information with third parties except in the following cases.</p>
+    <ul>
+      <li><strong>Legal requirements:</strong> when disclosure is required by law or legal process</li>
+      <li><strong>Game Center ranking:</strong> the nickname you set on Game Center and your total turf area (numeric value only) are shown to other players on the ranking screen</li>
+    </ul>
+    <div class="note">App data stored on your device (location, walking routes, turf, progress, etc.) cannot be accessed by any third party, including the developer.</div>
+
+    <h2>4. Data Storage and Deletion</h2>
+    <ul>
+      <li>All data within the App is stored only on your device</li>
+      <li>Uninstalling the App deletes all data on your device</li>
+      <li>You can delete stored data at any time from "<strong>Reset Data</strong>" in the settings screen</li>
+      <li>You can delete individual turf from the turf records screen</li>
+      <li>The developer has no means of accessing your data</li>
+    </ul>
+
+    <h2>5. Advertising and Tracking</h2>
+    <div class="no-ads">The App does not display any advertising. It does not use the advertising identifier (IDFA), perform any analytics, or carry out any behavioral tracking. No third-party measurement SDKs are included.</div>
+
+    <h2>6. OS Permissions</h2>
+    <p>The App uses the following OS permissions to provide its features. Granting them is optional, and you can use the App—except for certain features—without granting them.</p>
+    <ul>
+      <li><strong>Location:</strong> recording your route while walking, creating turf, and erosion determination (core feature)
+        <ul>
+          <li>You may choose "Allow While Using" or "Allow Always"</li>
+          <li>If you choose "Allow Always," walks can be recorded even in the background</li>
+        </ul>
+      </li>
+      <li><strong>Motion &amp; Fitness:</strong> obtaining step counts</li>
+      <li><strong>Notifications:</strong> streak reminders and notifications for monster appearances / turf disappearance</li>
+      <li><strong>Background Modes:</strong> recording location and running erosion tasks in the background</li>
+    </ul>
+    <p>Because location is the core feature for recording walks, we recommend granting it. If you do not grant it, you will not be able to start a walk or create turf.</p>
+
+    <h2>7. Use by Children</h2>
+    <p>The App is not directed at any specific age group, but because it involves outdoor walking, children should only use it under the supervision of a guardian. The App does not collect any personally identifiable information.</p>
+
+    <h2>8. Safety Notice</h2>
+    <div class="note">The App is intended for use while walking. Using a smartphone while walking is very dangerous. <strong>Please stop in a safe place before checking the screen.</strong> The developer assumes no responsibility for any accidents, injuries, or trouble arising from use of the App.</div>
+
+    <h2>9. Security</h2>
+    <ul>
+      <li>All entered data is stored only on your device</li>
+      <li>External communication is limited to that described in "1-2" of this Policy, and all of it uses HTTPS</li>
+      <li>We never transmit information that can personally identify you to external parties</li>
+    </ul>
+
+    <h2>10. Changes to This Policy</h2>
+    <p>This Privacy Policy may be changed without prior notice. If a significant change occurs, we will notify you through an app update. The latest policy is available on this page (the support site).</p>
+
+    <h2>11. Contact</h2>
+    <p>For questions or comments regarding this Privacy Policy, please contact us via the contact link on the developer's homepage.</p>
+    <p><a href="https://hiron-app.github.io" target="_blank" rel="noopener noreferrer" class="text-link">https://hiron-app.github.io</a></p>
+  </article>
 </main>
 
 <footer class="site-footer">
@@ -143,12 +272,32 @@
       <div class="site-footer__copy">© 2026 proscout2026 — All rights reserved.</div>
     </div>
     <div class="site-footer__nav">
-      <a href="index.html">アプリ一覧</a>
-      <a href="privacy.html">プライバシーポリシー一覧</a>
-      <a href="https://forms.gle/44vv4Db2T1MqpQ7r8" target="_blank" rel="noopener noreferrer">お問い合わせ</a>
+      <a href="index.html"><span data-lang-ja>アプリ一覧</span><span data-lang-en>All apps</span></a>
+      <a href="privacy.html"><span data-lang-ja>プライバシーポリシー一覧</span><span data-lang-en>Privacy policy list</span></a>
+      <a href="https://forms.gle/44vv4Db2T1MqpQ7r8" target="_blank" rel="noopener noreferrer"><span data-lang-ja>お問い合わせ</span><span data-lang-en>Contact</span></a>
     </div>
   </div>
 </footer>
+
+<script>
+  (function () {
+    var btnJa = document.getElementById('btnJa');
+    var btnEn = document.getElementById('btnEn');
+    function setLang(lang) {
+      var en = lang === 'en';
+      document.body.classList.toggle('is-en', en);
+      document.documentElement.lang = en ? 'en' : 'ja';
+      btnEn.setAttribute('aria-pressed', en ? 'true' : 'false');
+      btnJa.setAttribute('aria-pressed', en ? 'false' : 'true');
+      try { localStorage.setItem('privacy-nawabari-lang', lang); } catch (e) {}
+    }
+    btnJa.addEventListener('click', function () { setLang('ja'); });
+    btnEn.addEventListener('click', function () { setLang('en'); });
+    var saved;
+    try { saved = localStorage.getItem('privacy-nawabari-lang'); } catch (e) {}
+    if (saved === 'en') { setLang('en'); }
+  })();
+</script>
 
 </body>
 </html>
