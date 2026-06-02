@@ -52,7 +52,7 @@ const RENEWAL_APPS = [
     name: 'がんばった帳',
     nameEn: 'Ganbatta-cho',
     category: '家族 / お小遣い',
-    icon: 'uploads/IMG_7593 3.PNG',
+    icon: 'uploads/appicon_star_coin.png',
     catch: 'どんどんがんばる、かしこく使う。',
     tagline: 'がんばることを登録、終わったら承認、おこづかい自動加算。',
     desc: 'やることをリストに登録して、終わったら親に承認してもらう。自動でおこづかいが加算される、子どもも親もうれしいアプリ。お小遣い帳機能で収支管理もできる。',
