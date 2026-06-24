@@ -67,7 +67,7 @@
   </div>
 
   <article class="panel" data-lang-ja>
-    <p class="updated">最終更新日：2026年6月3日　／　本プライバシーポリシーは日本語を正式言語とします。</p>
+    <p class="updated">最終更新日：2026年6月24日　／　本プライバシーポリシーは日本語を正式言語とします。</p>
 
     <h2>はじめに</h2>
     <p class="intro">「ナワバリウォーク」（以下、「本アプリ」）をご利用いただきありがとうございます。本アプリは、散歩で歩いた軌跡から地図上にナワバリを作り、相棒の猫を育てるウォーキング体験を提供することを目的として開発された個人アプリです。<br><br>本プライバシーポリシーは、本アプリがどのような情報を扱い、それをどのように利用するかを説明するものです。本アプリをご利用になる前に、本ポリシーをよくお読みください。</p>
@@ -92,7 +92,7 @@
       <li><strong>Apple Maps（Apple Inc.）：</strong>地図表示のため、現在地周辺のタイル取得リクエストを送信します</li>
       <li><strong>WeatherKit（Apple Inc.）：</strong>天気による相棒の能力・ナワバリ侵食速度の補正のため、現在地の座標を送信して天気情報を取得します</li>
       <li><strong>App Store / StoreKit 2（Apple Inc.）：</strong>Pro プラン（自動更新サブスクリプション）の購入・復元のため、Apple が管理する購入情報を取得します</li>
-      <li><strong>Game Center（Apple Inc.）：</strong>ナワバリ総面積ランキングへのスコア送信のため、Game Center のプレイヤー識別子を利用します</li>
+      <li><strong>CloudKit（Apple Inc.）：</strong>ナワバリ総面積ランキングのため、お客様が入力した<strong>表示名（ニックネーム）</strong>と<strong>ナワバリ総面積（数値）</strong>を、Apple が提供する CloudKit のパブリックデータベースへ送信・保存します。保存先はお客様の iCloud アカウントに紐づくアプリ専用の識別子（匿名 ID）で管理され、氏名やメールアドレスなどは送信しません。iCloud にサインインしている端末でのみランキングに参加でき、サインインしていない場合はスコアの送信・保存は行われません</li>
       <li><strong>Apple Watch（WatchConnectivity）：</strong>お客様の iPhone と Apple Watch の間でのみ、散歩データやアイテム情報を同期します。Apple サーバーや開発者には送信されません</li>
       <li><strong>PostHog（プロダクト分析）：</strong>アプリの改善を目的に、<strong>匿名の利用イベント</strong>（例：アプリ起動、散歩の開始／終了、画面・機能の利用、各種許可の結果、課金導線の通過など）を PostHog のサーバー（米国）へ送信します。送信されるのはランダムに割り当てられた匿名 ID と、上記イベントおよび一般的な端末情報（OS バージョン・端末モデル・アプリバージョン・国／地域など）のみで、<strong>氏名・メールアドレス・正確な位置情報・歩行軌跡などお客様を個人として特定できる情報は送信しません</strong>。広告目的には一切利用しません</li>
     </ul>
@@ -108,7 +108,7 @@
       <tr><td>相棒情報・アイテム情報</td><td>相棒の進化・取得倍率や縮小耐性の計算・アイテム効果の適用</td></tr>
       <tr><td>天気情報</td><td>相棒の能力補正・ナワバリ侵食速度の調整</td></tr>
       <tr><td>StoreKit 購入情報</td><td>Pro プラン機能の有効化</td></tr>
-      <tr><td>Game Center プレイヤー識別子</td><td>ランキングへのスコア送信</td></tr>
+      <tr><td>表示名（ニックネーム）・ナワバリ総面積（CloudKit）</td><td>ランキングへのスコア送信・他プレイヤーへの順位表示</td></tr>
       <tr><td>匿名の利用イベント（PostHog）</td><td>アプリの不具合把握・機能改善・利用状況の分析</td></tr>
     </table>
 
@@ -116,7 +116,7 @@
     <p>本アプリは、以下の場合を除き、お客様の情報を第三者と共有しません。</p>
     <ul>
       <li><strong>法的要求：</strong>法律または法的手続きにより開示が必要な場合</li>
-      <li><strong>Game Center ランキング：</strong>お客様自身が設定した Game Center 上のニックネームと総ナワバリ面積（数値のみ）が、ランキング画面で他のプレイヤーに表示されます</li>
+      <li><strong>CloudKit ランキング：</strong>お客様自身が入力した表示名（ニックネーム）と総ナワバリ面積（数値のみ）が、ランキング画面で他のプレイヤーに表示されます。これらは Apple の CloudKit 上に保存され、本名やメールアドレス等は公開されません</li>
     </ul>
     <div class="note">お客様のデバイスに保存されたアプリデータ（位置情報・歩行軌跡・ナワバリ・進捗等）は、開発者を含む第三者がアクセスすることは一切できません。</div>
 
@@ -169,7 +169,7 @@
   </article>
 
   <article class="panel" data-lang-en>
-    <p class="updated">Last updated: June 3, 2026　／　The Japanese text of this Privacy Policy is the official version; this English text is provided for reference.</p>
+    <p class="updated">Last updated: June 24, 2026　／　The Japanese text of this Privacy Policy is the official version; this English text is provided for reference.</p>
 
     <h2>Introduction</h2>
     <p class="intro">Thank you for using "TurfWalk" (the "App"). The App is a personal app developed to provide a walking experience in which you create "turf" on a map from the routes you walk and raise your companion cat.<br><br>This Privacy Policy explains what information the App handles and how that information is used. Please read this Policy carefully before using the App.</p>
@@ -194,7 +194,7 @@
       <li><strong>Apple Maps (Apple Inc.):</strong> sends tile requests for the area around your current location in order to display the map</li>
       <li><strong>WeatherKit (Apple Inc.):</strong> sends your current coordinates to obtain weather information, used to adjust companion abilities and turf erosion speed based on the weather</li>
       <li><strong>App Store / StoreKit 2 (Apple Inc.):</strong> obtains purchase information managed by Apple in order to purchase or restore the Pro plan (an auto-renewing subscription)</li>
-      <li><strong>Game Center (Apple Inc.):</strong> uses your Game Center player identifier to submit your score to the total-turf-area ranking</li>
+      <li><strong>CloudKit (Apple Inc.):</strong> for the total-turf-area ranking, the <strong>display name (nickname)</strong> you enter and your <strong>total turf area (a numeric value)</strong> are sent to and stored in the public database of CloudKit provided by Apple. They are managed under an app-specific identifier (an anonymous ID) tied to your iCloud account; your name, email address, and the like are not sent. You can participate in the ranking only on a device signed in to iCloud; if you are not signed in, no score is sent or stored</li>
       <li><strong>Apple Watch (WatchConnectivity):</strong> syncs walk data and item information only between your iPhone and Apple Watch. This is not sent to Apple servers or to the developer</li>
       <li><strong>PostHog (product analytics):</strong> to improve the App, it sends <strong>anonymous usage events</strong> (e.g. app launch, start/end of a walk, use of screens and features, results of permission prompts, passing through purchase flows) to PostHog's servers (United States). What is sent is only a randomly assigned anonymous ID together with the above events and general device information (OS version, device model, app version, country/region, etc.). <strong>It does not send any information that can personally identify you, such as your name, email address, precise location, or walking routes.</strong> It is never used for advertising purposes</li>
     </ul>
@@ -210,7 +210,7 @@
       <tr><td>Companion and item information</td><td>Companion evolution, calculation of acquisition multipliers and shrink resistance, and applying item effects</td></tr>
       <tr><td>Weather information</td><td>Adjusting companion abilities and turf erosion speed</td></tr>
       <tr><td>StoreKit purchase information</td><td>Enabling Pro plan features</td></tr>
-      <tr><td>Game Center player identifier</td><td>Submitting scores to the ranking</td></tr>
+      <tr><td>Display name (nickname) and total turf area (CloudKit)</td><td>Submitting scores to the ranking and showing rankings to other players</td></tr>
       <tr><td>Anonymous usage events (PostHog)</td><td>Identifying bugs, improving features, and analyzing usage</td></tr>
     </table>
 
@@ -218,7 +218,7 @@
     <p>The App does not share your information with third parties except in the following cases.</p>
     <ul>
       <li><strong>Legal requirements:</strong> when disclosure is required by law or legal process</li>
-      <li><strong>Game Center ranking:</strong> the nickname you set on Game Center and your total turf area (numeric value only) are shown to other players on the ranking screen</li>
+      <li><strong>CloudKit ranking:</strong> the display name (nickname) you enter and your total turf area (numeric value only) are shown to other players on the ranking screen. These are stored on Apple's CloudKit, and your real name, email address, and the like are not made public</li>
     </ul>
     <div class="note">App data stored on your device (location, walking routes, turf, progress, etc.) cannot be accessed by any third party, including the developer.</div>
 
