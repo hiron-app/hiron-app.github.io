@@ -3,6 +3,28 @@
 
 const RENEWAL_APPS = [
   {
+    id: 'yomi',
+    name: '読書の旅',
+    nameEn: 'Dokusho no Tabi',
+    category: '読書 / ライフスタイル',
+    icon: 'uploads/icon_1024.png',
+    catch: '読んだ本を、ムードとデータで美しく振り返る。',
+    tagline: '本棚に表紙を並べ、読書を上質なグラフで可視化。読了の一冊は「旅のカード」に。',
+    desc: '読んだ本を「ムードとデータで美しく振り返る」読書記録アプリ。本棚に表紙を並べ、読書のペース・ジャンル・読後感を上質なグラフで可視化。読み終えた一冊は「旅のカード」にして、SNSでシェアできる。広告で急かさない、静かな設計。',
+    accent: '#1E3A52',
+    features: [
+      { ico: 'tap',      label: '検索 / バーコードでかんたん登録' },
+      { ico: 'check',    label: '読みたい・読書中・読了を管理' },
+      { ico: 'chart',    label: '読書統計を美しいグラフで可視化' },
+      { ico: 'compass',  label: '読了を「旅のカード」でシェア' },
+      { ico: 'map',      label: '図書館の蔵書・貸出を確認（カーリル）' },
+      { ico: 'clock',    label: '読書ポモドーロで集中' },
+    ],
+    appStoreUrl: 'https://apps.apple.com/us/app/%E8%AA%AD%E6%9B%B8%E3%81%AE%E6%97%85-%E5%BF%83%E5%9C%B0%E3%81%84%E3%81%84%E8%AA%AD%E6%9B%B8%E4%BD%93%E9%A8%93/id6783154303?ct=hp_yomi&mt=8',
+    privacyUrl: 'privacy-yomilog.html',
+    status: 'available',
+  },
+  {
     id: 'nawabari',
     name: 'ナワバリウォーク',
     nameEn: 'NawabariWalk',
